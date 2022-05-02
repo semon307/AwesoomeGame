@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
+import { Board } from './tic-tac-toe/board';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -14,9 +15,31 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
+        <View style={styles.container}>
+          {/*<Navigation colorScheme={colorScheme} />*/}
+          <Board/>
+          <StatusBar/>
+        </View>
       </SafeAreaProvider>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 20,
+    color: '#000',
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
+  },
+});
