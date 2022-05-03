@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Gallows } from './gallows/gallows';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -17,7 +18,8 @@ export default function App() {
       <SafeAreaProvider>
         <View style={styles.container}>
           {/*<Navigation colorScheme={colorScheme} />*/}
-          <Board/>
+          {/*<Board/>*/}
+          <Gallows/>
           <StatusBar/>
         </View>
       </SafeAreaProvider>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
+import { Button } from '../common/button';
 import { Square } from './square';
 import { checkWinner } from './utils';
 
@@ -64,12 +65,7 @@ export const Board: React.FC = () => {
         {winnerString === 'Diagonals 1' &&
           <View style={{ ...styles.Board__StrikeThroughLine__DiagonalLeft, ...styles.Board__StrikeThroughLine }}/>}
       </View>
-      <Pressable
-        onPress={resetValues}
-        style={styles.Board__Button}
-      >
-        <Text style={styles.Board__ButtonTex}>Play again!</Text>
-      </Pressable>
+      <Button title={'Play again!'} onPress={resetValues}/>
     </>
   )
 }
@@ -86,23 +82,6 @@ const styles = StyleSheet.create({
   Board__Title: {
     marginBottom: 50,
     fontSize: 16,
-  },
-  Board__Button: {
-    marginTop: 70,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: 'black',
-  },
-  Board__ButtonTex: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: 'bold',
-    letterSpacing: 0.25,
-    color: 'white',
   },
   Board__StrikeThroughLine: {
     borderWidth: 1,
