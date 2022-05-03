@@ -7,6 +7,7 @@ export type TicTacToe = null | 'X' | '0'
 
 export const Board: React.FC = () => {
   const [winner, setWinner] = useState<TicTacToe>(null)
+  const [winnerString, setWinnerString] = useState<string>('')
   const [playerFirstMove, setPlayerFirstMove] = useState<boolean>(true)
   const [state, setState] = useState<Array<TicTacToe>>([
     null, null, null,
@@ -15,6 +16,7 @@ export const Board: React.FC = () => {
   ])
 
   const setValue = (value: TicTacToe, elementIndex: number) => {
+    if (state[elementIndex] || winner) return;
     setState(state.map((field, index) => index === elementIndex ? value : field))
     setPlayerFirstMove(!playerFirstMove)
   }
@@ -25,14 +27,15 @@ export const Board: React.FC = () => {
   }
 
   useEffect(() => {
-    setWinner(checkWinner(state))
+    setWinner(checkWinner(state).result)
+    setWinnerString(checkWinner(state).winnerString)
   }, [state])
   return (
     <>
       <Text style={styles.Board__Title}>{
         winner
-          ? `Player ${playerFirstMove ? 2 : 1} win`
-          : `Player ${playerFirstMove ? 1 : 2} moves`}
+          ? `Player ${playerFirstMove ? '0' : 'X'} win`
+          : `Player ${playerFirstMove ? 'X' : '0'} moves`}
       </Text>
       <View style={styles.Board}>
         {state.map((field, index) => (
@@ -44,13 +47,29 @@ export const Board: React.FC = () => {
             onSetValue={setValue}
           />
         ))}
-        <Pressable
-          onPress={resetValues}
-          style={styles.Board__Button}
-        >
-          <Text style={styles.Board__ButtonTex}>Play again!</Text>
-        </Pressable>
+        {winnerString === 'Rows 0'
+          && <View style={{ ...styles.Board__StrikeThroughLine__Top, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Rows 1' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__MiddleRow, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Rows 2' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__Bottom, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Columns 0' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__Left, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Columns 1' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__MiddleColumn, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Columns 2' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__Right, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Diagonals 0' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__DiagonalRight, ...styles.Board__StrikeThroughLine }}/>}
+        {winnerString === 'Diagonals 1' &&
+          <View style={{ ...styles.Board__StrikeThroughLine__DiagonalLeft, ...styles.Board__StrikeThroughLine }}/>}
       </View>
+      <Pressable
+        onPress={resetValues}
+        style={styles.Board__Button}
+      >
+        <Text style={styles.Board__ButtonTex}>Play again!</Text>
+      </Pressable>
     </>
   )
 }
@@ -61,14 +80,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 192,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'relative',
   },
   Board__Title: {
     marginBottom: 50,
     fontSize: 16,
   },
   Board__Button: {
-    marginTop: 100,
+    marginTop: 70,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
@@ -83,5 +103,55 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+  },
+  Board__StrikeThroughLine: {
+    borderWidth: 1,
+    borderColor: '#999',
+  },
+  Board__StrikeThroughLine__Top: {
+    position: 'absolute',
+    top: 32,
+    left: 0,
+    right: 0
+  },
+  Board__StrikeThroughLine__MiddleRow: {
+    position: 'absolute',
+    top: 96,
+    left: 0,
+    right: 0
+  },
+  Board__StrikeThroughLine__Bottom: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 32,
+  },
+  Board__StrikeThroughLine__Left: {
+    position: 'absolute',
+    left: 32,
+    top: 0,
+    bottom: 0,
+  },
+  Board__StrikeThroughLine__MiddleColumn: {
+    position: 'absolute',
+    left: 96,
+    top: 0,
+    bottom: 0,
+  },
+  Board__StrikeThroughLine__Right: {
+    position: 'absolute',
+    right: 32,
+    top: 0,
+    bottom: 0,
+  },
+  Board__StrikeThroughLine__DiagonalRight: {
+    position: 'absolute',
+    transform: [{skewY: '-45deg'}],
+    width: '100%',
+  },
+  Board__StrikeThroughLine__DiagonalLeft: {
+    position: 'absolute',
+    transform: [{skewY: '45deg'}],
+    width: '100%',
   },
 })
